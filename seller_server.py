@@ -2,16 +2,18 @@
 from Connection import socket_connection
 from product import inventory
 import socket 
+import json
 
-class seller:
+class seller_server:
     
     def put_item(self,seller_id,item,quantity):
         product_db = inventory.get_db_instance()
         item["seller_id"] = seller_id
-        item["item_id"] = "123"
+        #item["item_id"] = "123"
         item["quantity"] = quantity
         product_db.put_item(item)
-        print("Add item called "+str(product_db.inv))
+        #print("Add item called "+str(product_db.inv))
+        # return the item id to the seller 
         return "Ok"
     
     def update_price(self,seller_id,item_id,price):
@@ -26,9 +28,39 @@ class seller:
         
     def display_item(self,seller_id):
         product_db = inventory.get_db_instance()
-        item_list = product_db.get_itemby_seller_id(seller_id)
+        item_list = product_db.get_item_by_seller_id(seller_id)
         return item_list
     
+    def adapter(self,data):
+        data = data.decode('utf-8')
+        data = json.loads(data)
+        try :
+            if 'operation' in data:
+                if data['operation'] == 'put_item':
+                    seller_id = data['seller_id']
+                    item = data['item']
+                    quantity = data['quantity']
+                    return self.put_item(seller_id,item,quantity)
+                elif data['operation'] == 'update_price':
+                    seller_id=data['seller_id']
+                    item_id=data['item_id']
+                    price=data['price']
+                    return self.update_price(seller_id,item_id,price)
+                elif data['operation'] == 'remove_item':
+                    seller_id = data['seller_id']
+                    item_id = data['item_id']
+                    quantity = data['quantity']
+                    return self.remove_item(seller_id,item_id,quantity)
+                elif data['operation'] == 'display_item':
+                    seller_id = data['seller_id']
+                    return self.display_item(seller_id)
+                else: 
+                    return "Not a valid operation"
+            else:
+                return "Invalid Input"
+        except Exception as e:
+            print("Error occured while parsing input data")
+            return str(e)    
     
     def start_server(self):
         host='127.0.0.1'
@@ -45,14 +77,12 @@ class seller:
                         if not data:
                             break
                         response = self.adapter(data)
-                        conn.sendall(response)
+                        conn.sendall(json.dumps(response).encode('utf-8'))
         except Exception as e:
             print("Closing the connection "+str(e))
-            sock.close()
-        
+            sock.close()               
                 
-                
-s = seller()
+s = seller_server()
 s.start_server()
                 
 
