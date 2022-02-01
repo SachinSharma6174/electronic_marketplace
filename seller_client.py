@@ -45,5 +45,11 @@ def main():
     update_price(seller_id,item_id,5)
     remove_item(seller_id,item_id,4)
     display_item(seller_id)
-    
-main()
+  
+if __name__=="__main__":
+    main()
+
+   
+
+
+
