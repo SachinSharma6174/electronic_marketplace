@@ -82,6 +82,16 @@ class client_server():
             print("Closing the connection "+str(e))
             sock.close()    
         
-c = client_server()
-c.start_server()
+
+def main():
+    print("Starting Buyer Server !!")
+    c = client_server()
+    c.start_server()
+    print("Buyer Server is UP !!")
+  
+  
+if __name__=="__main__":
+    main()
+
+
                 

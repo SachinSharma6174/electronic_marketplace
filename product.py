@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 from ast import Pass
 
-from seller_server import seller_server
 
 class inventory():
     inv = None

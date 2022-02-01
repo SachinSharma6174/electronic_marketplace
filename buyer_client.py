@@ -53,3 +53,6 @@ def main():
     remove_item(buyer_id,items[0]["item_id"],"2")
     display_cart(buyer_id)
     clear_cart(buyer_id)
+
+if __name__=="__main__":
+    main()

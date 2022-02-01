@@ -84,5 +84,16 @@ class seller_server:
                 
 s = seller_server()
 s.start_server()
+
+def main():
+    print("Starting Seller Server !!")
+    s = seller_server()
+    s.start_server()
+    print("Seller Server is UP !!")
+  
+  
+if __name__=="__main__":
+    main()
+
                 
 
