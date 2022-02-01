@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 from ast import Pass
 
-from seller_server import seller_server
-
 class inventory():
     inv = None
     __instance = None
@@ -23,7 +21,9 @@ class inventory():
         print("Inventory called")
     
     def get_item_id(self,category_id):
+        print("get item called")
         val = self.lst[category_id]
+        print("Category Id "+str(category_id))
         self.lst[category_id] = val + 1
         return val
     
@@ -32,6 +32,7 @@ class inventory():
         #generate ID
         #Keep number for each category 
         item_id = self.get_item_id(item['category_id'])
+        print("Item Id recieved "+str(item_id))
         item['item_id'] = item_id
         self.inv['items'].append(item)
         return item_id
@@ -48,21 +49,19 @@ class inventory():
                         break
         return search_items
         
-    # def delete_item(self, item):
-    #     print("delete item function called")
-    #     Pass
-        
-    # def get_item(self, item):
-    #     print("get item function called")
-    #     Pass
-        
     def update_item(self,item_id,key,value):
         item_lst = self.inv["items"]
+        flag = 0
         for item in item_lst:
             if item["item_id"] == item_id:
                 item[key] = value
+                flag = 1
                 break
-        self.inv["items"] = item_lst
+        if flag == 1:
+            self.inv["items"] = item_lst
+            return "Updated "+str(item_id)+" "+str(key)+" to "+str(value)
+        else: 
+            return "No such item item found."
         
     def get_item_by_seller_id(self,seller_id):
         item_by_seller = []

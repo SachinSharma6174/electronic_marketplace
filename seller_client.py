@@ -14,7 +14,7 @@ def put_item(seller_id,item,quantity):
     return response
 
 def update_price(seller_id,item_id,price):
-    data = {'operation':'update_price',seller_id:seller_id,'item_id':item_id,'price':price}
+    data = {'operation':'update_price','seller_id':seller_id,'item_id':item_id,'price':price}
     call_seller_sever(data)
 
 def remove_item(seller_id,item_id,quantity):
@@ -34,10 +34,12 @@ def call_seller_sever(data):
         data = s.recv(1024)
 
     print('Received', repr(data))
-    return data
+    data = data.decode('utf-8')
+    return json.loads(data)
     
 def main():
-    item = {"name":"Pen","category":"0","keywords":["pen","stationary","ink","pencil","school supplies"],"condition":"new","sale_price":"2.5"}
+    item = {"name":"Pen","category_id":0,"keywords":["pen","stationary","ink","pencil","school supplies"],"condition":"new","sale_price":"2.5"}
+    # During login api caller seller client will recieve seller_id
     seller_id = '123'
     item_id = put_item(seller_id,item,10)
     update_price(seller_id,item_id,5)

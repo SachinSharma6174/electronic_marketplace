@@ -9,22 +9,17 @@ class seller_server:
     def put_item(self,seller_id,item,quantity):
         product_db = inventory.get_db_instance()
         item["seller_id"] = seller_id
-        #item["item_id"] = "123"
         item["quantity"] = quantity
-        product_db.put_item(item)
-        #print("Add item called "+str(product_db.inv))
-        # return the item id to the seller 
-        return "Ok"
+        return product_db.put_item(item)
     
     def update_price(self,seller_id,item_id,price):
         product_db = inventory.get_db_instance()
-        product_db.update_item(item_id,key='sale_price',value=price)
-        return "Ok"
+        return product_db.update_item(item_id,key='sale_price',value=price)
+        
         
     def remove_item(self,seller_id,item_id,quantity):
         product_db = inventory.get_db_instance()
-        product_db.update_item(item_id,key='quantity',value=quantity)
-        return "Ok"
+        return product_db.update_item(item_id,key='quantity',value=quantity)
         
     def display_item(self,seller_id):
         product_db = inventory.get_db_instance()
@@ -59,7 +54,7 @@ class seller_server:
             else:
                 return "Invalid Input"
         except Exception as e:
-            print("Error occured while parsing input data")
+            print("Error occured while parsing input data"+str(e))
             return str(e)    
     
     def start_server(self):
