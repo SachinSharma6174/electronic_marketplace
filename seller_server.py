@@ -6,16 +6,13 @@ import json
 
 class seller_server:
     
-    def put_item(self,seller_id,item,quantity):
+    def put_item(self,seller_id,item):
         product_db = inventory.get_db_instance()
-        item["seller_id"] = seller_id
-        item["quantity"] = quantity
-        return product_db.put_item(item)
+        return product_db.put_item(item,seller_id)
     
     def update_price(self,seller_id,item_id,price):
         product_db = inventory.get_db_instance()
-        return product_db.update_item(item_id,key='sale_price',value=price)
-        
+        return product_db.update_item(item_id,key='sale_price',value=price)   
         
     def remove_item(self,seller_id,item_id,quantity):
         product_db = inventory.get_db_instance()
@@ -34,17 +31,19 @@ class seller_server:
                 if data['operation'] == 'put_item':
                     seller_id = data['seller_id']
                     item = data['item']
-                    quantity = data['quantity']
-                    return self.put_item(seller_id,item,quantity)
+                    return self.put_item(seller_id,item)
                 elif data['operation'] == 'update_price':
-                    seller_id=data['seller_id']
-                    item_id=data['item_id']
+                    print("Check the value "+str(data['item_id']))
+                    seller_id = data['seller_id']
+                    item_id = data['item_id']
                     price=data['price']
                     return self.update_price(seller_id,item_id,price)
                 elif data['operation'] == 'remove_item':
                     seller_id = data['seller_id']
                     item_id = data['item_id']
                     quantity = data['quantity']
+                    if quantity < 0:
+                        return (-1,"Quantity cannot be less than 0")
                     return self.remove_item(seller_id,item_id,quantity)
                 elif data['operation'] == 'display_item':
                     seller_id = data['seller_id']
@@ -54,7 +53,7 @@ class seller_server:
             else:
                 return "Invalid Input"
         except Exception as e:
-            print("Error occured while parsing input data"+str(e))
+            print("Error occured while parsing input data "+str(e))
             return str(e)    
     
     def start_server(self):
@@ -77,8 +76,6 @@ class seller_server:
             print("Closing the connection "+str(e))
             sock.close()               
                 
-s = seller_server()
-s.start_server()
 
 def main():
     print("Starting Seller Server !!")

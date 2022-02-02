@@ -26,8 +26,7 @@ class shopping_cart():
             item_dict[item_id] = quantity
         else:
             self.cart[buyer_id] = {item_id:quantity}
-        print("Add item function called")
-        Pass
+        return "Added item to cart"
         
     def remove_item(self,buyer_id,item_id,quantity):
         print("Remove item function called")
@@ -36,22 +35,22 @@ class shopping_cart():
             item_dict[item_id] = quantity
         else:
             self.cart[buyer_id] = {item_id:quantity}
-        return "Ok"
+        return "Removed item from cart"
     
     def clear_cart(self,buyer_id):
         print("Clear cart function called")
         if buyer_id in self.cart:
             del self.cart[buyer_id]
-            return "Ok"
+            return "cleared cart"
         else:
-            return "Cart is empty"
+            return "cart is empty"
     
     def display_cart(self,buyer_id):
         print("Display cart function called")
         if buyer_id in self.cart:
             return self.cart[buyer_id]
         else:
-            return "Empty cart"
+            return "empty cart"
     
 
     

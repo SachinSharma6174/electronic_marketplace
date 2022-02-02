@@ -1,7 +1,4 @@
 #!/usr/bin/python3
-from ast import keyword, operator
-import imp
-from unicodedata import category
 from Connection import socket_connection
 from product import inventory
 from shopping_cart import shopping_cart
@@ -13,23 +10,23 @@ class client_server():
     
     def search_item(self,category_id,keywords):
         product_db = inventory.get_db_instance()
-        return "Ok"
+        return product_db.search_item(category_id,keywords)
     
     def add_item(self,buyer_id,item_id,quantity):
         cart = shopping_cart.get_db_instance()
-        return "Ok"
+        return cart.add_item(buyer_id,item_id,quantity)
     
     def remove_item(self,buyer_id,item_id,quantity):
         cart = shopping_cart.get_db_instance()
-        return "Ok"
+        return cart.remove_item(buyer_id,item_id,quantity)
     
     def clear_cart(self,buyer_id):
         cart = shopping_cart.get_db_instance()
-        return "Ok"
+        return cart.clear_cart(buyer_id)
     
     def display_cart(self,buyer_id):
         cart = shopping_cart.get_db_instance()
-        return "Ok"
+        return cart.display_cart(buyer_id)
 
     def adapter(self, data):
         try:
