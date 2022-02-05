@@ -3,6 +3,7 @@ from Connection import socket_connection
 from product import inventory
 import socket 
 import json
+import pickle
 
 class seller_server:
     
@@ -23,6 +24,11 @@ class seller_server:
         item_list = product_db.get_item_by_seller_id(seller_id)
         return item_list
     
+    def printDB(self):
+        product_db = inventory.get_db_instance()
+        redisDB = product_db.redisDB
+        print("PRODUCT DB STATE NOW ",pickle.loads(product_db.redisDB.get("productDB")))
+
     def adapter(self,data):
         data = data.decode('utf-8')
         data = json.loads(data)
@@ -48,6 +54,9 @@ class seller_server:
                 elif data['operation'] == 'display_item':
                     seller_id = data['seller_id']
                     return self.display_item(seller_id)
+                elif data['operation'] == 'printDB':
+                    self.printDB()
+                    return True
                 else: 
                     return "Not a valid operation"
             else:

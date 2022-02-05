@@ -4,13 +4,16 @@ from product import inventory
 from shopping_cart import shopping_cart
 import socket 
 import json
-
+import pickle
 
 class client_server():
     
     def search_item(self,category_id,keywords):
+        print("\nSearch Items Called")
         product_db = inventory.get_db_instance()
-        return product_db.search_item(category_id,keywords)
+        response = product_db.search_item(category_id,keywords)
+        print("\nRESPONSE ON BUYER SERVER",response)
+        return response
     
     def add_item(self,buyer_id,item_id,quantity):
         cart = shopping_cart.get_db_instance()
@@ -28,6 +31,12 @@ class client_server():
         cart = shopping_cart.get_db_instance()
         return cart.display_cart(buyer_id)
 
+    def printDB(self):
+        product_db = inventory.get_db_instance()
+        redisDB = product_db.redisDB
+        print("BUYER PRODUCT DB STATE NOW ",pickle.loads(product_db.redisDB.get("productDB")))
+
+
     def adapter(self, data):
         try:
             data = data.decode('utf-8')
@@ -36,23 +45,27 @@ class client_server():
                 if data['operation'] == 'search_item':
                     category_id = data['category_id']
                     keywords = data['keywords']
-                    self.search_item(category_id,keywords)
+                    return self.search_item(category_id,keywords)
                 elif data['operation'] == 'add_item':
                     buyer_id = data['buyer_id']
                     item_id = data['item_id']
                     quantity = data['quantity']
-                    self.add_item(buyer_id,item_id,quantity)
+                    return self.add_item(buyer_id,item_id,quantity)
                 elif data['operation']  == 'remove_item':
                     buyer_id = data['buyer_id']
                     item_id = data['item_id']
                     quantity = data['quantity']
-                    self.remove_item(buyer_id,item_id,quantity)
+                    return self.remove_item(buyer_id,item_id,quantity)
                 elif data['operation'] == 'clear_cart':
                     buyer_id = data['buyer_id']
-                    self.clear_cart(buyer_id)
+                    return self.clear_cart(buyer_id)
                 elif data['operation'] == 'display_cart':
                     buyer_id = data['buyer_id']
-                    self.display_cart(buyer_id)
+                    return self.display_cart(buyer_id)
+                elif data['operation'] == 'display_all_items':
+                    self.printDB()
+                    return True
+
             else:
                 return "Invalid Input"     
         except Exception as e:
