@@ -1,18 +1,18 @@
-System Design:
+### System Design:
 
-The application consists of 6 components:
+#### The application consists of 6 components:
 
-1. Seller side Server Interface -  The seller server, using socket running on port 1200, which accepts all incoming connections. The server side is also implementing all the API business logic and interaction with the Redis DB. The seller identifies different API requests using parameters in the Request. Using a "operation" field in the request, and adapter rooutes the request to respective API, replicating a dispatcher servlet in RestApi Framework.
+1. #####Seller side Server Interface -  The seller server, using socket running on port 1200, which accepts all incoming connections. The server side is also implementing all the API business logic and interaction with the Redis DB. The seller identifies different API requests using parameters in the Request. Using a "operation" field in the request, and adapter rooutes the request to respective API, replicating a dispatcher servlet in RestApi Framework.
 
-2. Seller side Client Interface - Seller Client is a replication of the frontend that interacts with the seller server. The main functions calls api and the socket application connects to  seller server socket using SOCK_STREAM 
+2. #####Seller side Client Interface - Seller Client is a replication of the frontend that interacts with the seller server. The main functions calls api and the socket application connects to  seller server socket using SOCK_STREAM 
 
-3. Buyer side Server Interface - The buyer server, using socket running on port 1500, which accepts all incoming connections. The server side is also implementing all the API business logic and interaction with the cart DB, which is singleton class. The buyer identifies different API requests using parameters in the Request. Using a "operation" field in the request, and adapter rooutes the request to respective API, replicating a dispatcher servlet in RestApi Framework.
+3. #### Buyer side Server Interface - The buyer server, using socket running on port 1500, which accepts all incoming connections. The server side is also implementing all the API business logic and interaction with the cart DB, which is singleton class. The buyer identifies different API requests using parameters in the Request. Using a "operation" field in the request, and adapter rooutes the request to respective API, replicating a dispatcher servlet in RestApi Framework.
 
-4. Buyer side Client Interface - Buyer Client is a replication of the frontend that interacts with the buyer server. The main functions calls api and the socket application connects to  seller server socket using SOCK_STREAM. It is used to search items from product Db and manipulate the Cart Db.
+4. ##### Buyer side Client Interface - Buyer Client is a replication of the frontend that interacts with the buyer server. The main functions calls api and the socket application connects to  seller server socket using SOCK_STREAM. It is used to search items from product Db and manipulate the Cart Db.
 
-5. Redis DB as product database - storing items as key value pair. The data is Utf-8 encoded.
+5. ##### Redis DB as product database - storing items as key value pair. The data is Utf-8 encoded.
 
-6. Singleton class as user cart -  This ensures that Buyer server can only instantiate the cart data bases once per userId and the data doesnot get reset in subsequent client API calls.
+6. ##### Singleton class as user cart -  This ensures that Buyer server can only instantiate the cart data bases once per userId and the data doesnot get reset in subsequent client API calls.
 
 
 
